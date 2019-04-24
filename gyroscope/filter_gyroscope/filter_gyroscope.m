@@ -1,17 +1,7 @@
 clear all;
 close all;
 
-datanames = {'suns1', 
-             'suns2', 
-             'suns3', 
-             'suns4', 
-             'suns5', 
-             'suns6', 
-             'suns7', 
-             'suns8', 
-             'sunsps1', 
-             'sunsps2', 
-             'sunsps3'};
+datanames = {'sunsps4'};
 
 for k=1:length(datanames)
     dataname = datanames{k}
