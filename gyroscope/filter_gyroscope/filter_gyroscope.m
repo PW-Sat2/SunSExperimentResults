@@ -1,7 +1,7 @@
 clear all;
 close all;
 
-datanames = {'sunsps4'};
+datanames = {'sunsps5'};
 
 for k=1:length(datanames)
     dataname = datanames{k}
