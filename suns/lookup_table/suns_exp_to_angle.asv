@@ -1,0 +1,3 @@
+process_suns_file('suns3_time_corrected');
+
+files = {};
