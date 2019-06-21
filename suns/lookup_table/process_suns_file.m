@@ -69,8 +69,8 @@ for als=[1, 2, 3]
                 result = raw_to_angle(picked_x, picked_y, calibration_x, calibration_y, uncertainty);
 
                 if (size(result) ~= [0, 0])
-                    x_out = calib_step*mean(result(:,1));
-                    y_out = calib_step*mean(result(:,2));
+                    x_out = calib_step*mean(result(:,1)-1);
+                    y_out = calib_step*mean(result(:,2)-1);
 
                     x_results = [x_results, x_out];
                     y_results = [y_results, y_out];
