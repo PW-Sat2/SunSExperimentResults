@@ -63,7 +63,7 @@ for als=[1, 2, 3]
         uncertainty = UNCERTAINTY_0;
         counter = 0;
 
-        if suns.ALSVL1A(i) > SHADOW_THRESHOLD && suns.ALSVL1B(i) > SHADOW_THRESHOLD && suns.ALSVL1C(i) > SHADOW_THRESHOLD && suns.ALSVL1D(i) > SHADOW_THRESHOLD
+        if suns.ALSVL1A(i) > SHADOW_THRESHOLD || suns.ALSVL1B(i) > SHADOW_THRESHOLD || suns.ALSVL1C(i) > SHADOW_THRESHOLD || suns.ALSVL1D(i) > SHADOW_THRESHOLD
             while counter < RETRIES_THRESHOLD
                 counter = counter + 1;
                 result = raw_to_angle(picked_x, picked_y, calibration_x, calibration_y, uncertainty);
