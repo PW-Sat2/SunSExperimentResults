@@ -36,13 +36,15 @@ all_x_results = {x_results_1, x_results_2, x_results_3};
 y_results_1 = [];
 y_results_2 = [];
 y_results_3 = [];
+
+calib_step = Data.xRes;
 all_y_results = {y_results_1, y_results_2, y_results_3};
 als_calib_data_columns = {1, 3, 5};
 
 for als=[1, 2, 3]
     calibration_x = Data.valueVisNormalized(:, :, als_calib_data_columns{als});
     calibration_y = Data.valueVisNormalized(:, :, als_calib_data_columns{als}+1);
-    calib_step = Data.xRes;
+    
 
     orbit_x = als_x{als};
     orbit_y = als_y{als};
@@ -69,8 +71,8 @@ for als=[1, 2, 3]
                 result = raw_to_angle(picked_x, picked_y, calibration_x, calibration_y, uncertainty);
 
                 if (size(result) ~= [0, 0])
-                    x_out = calib_step*mean(result(:,1)-1);
-                    y_out = calib_step*mean(result(:,2)-1);
+                    x_out = calib_step*(mean(result(:,1)-1));
+                    y_out = calib_step*(mean(result(:,2)-1));
 
                     x_results = [x_results, x_out];
                     y_results = [y_results, y_out];
@@ -79,7 +81,7 @@ for als=[1, 2, 3]
                     uncertainties(counter) = uncertainty;
                     res_size = size(result);
 
-                    %fprintf('T: %.2f; X: %.3f; Y: %.3f; SIZE: %d; UN: %.4f; RET: %d\n', suns.timestamp(i), x_out, y_out, res_size(1), uncertainty, counter);
+                    fprintf('T: %.2f; X: %.3f; Y: %.3f; SIZE: %d; UN: %.4f; RET: %d\n', suns.timestamp(i), x_out, y_out, res_size(1), uncertainty, counter);
                     break
                 end
                 uncertainty = uncertainty + UNCERTAINTY_INC;
@@ -148,6 +150,6 @@ suns_exp.meas_file = meas_file;
 suns_exp.calibration_file = calibration_file;
 
 
-save(strcat('outputs\', meas_file, '\', meas_file, '.mat'), 'suns_exp');
+save(strcat('outputs\', meas_file, '\', meas_file, '_suns_exp.mat'), 'suns_exp');
 end
 

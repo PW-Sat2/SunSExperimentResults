@@ -14,7 +14,7 @@ files = {'suns1',
          'sunsps6',
          'sunsps7'};
 
-for i = 1:numel(files)
+for i = 4:4
     files{i}
     process_suns_file(files{i});
 end
