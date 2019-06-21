@@ -27,6 +27,7 @@ for i = 1:numel(files)
 
     [z_ref,y_ref,x_ref] = sph2cart(deg2rad(suns_ref.suns_ref_fi), deg2rad(suns_ref.suns_ref_theta), 1);
     
+    % Correct for mounting angle of the SunS Ref
     Ro = deg2rad(-15);  % SunS Ref mounting angle
     Rz = [cos(Ro) -sin(Ro) 0 ; sin(Ro) cos(Ro) 0 ; 0 0 1] ;
 
@@ -70,8 +71,8 @@ for i = 1:numel(files)
     ylabel('Z Angle (\circ)');
     xlabel('Time (min)');
     
-    mkdir(strcat('..\combined_plots\suns_exp_and_ref_not_corrected_in_cartesian\', files{i}));
-    print(f, strcat('..\combined_plots\suns_exp_and_ref_not_corrected_in_cartesian\', files{i}, '\', files{i}, '_suns_exp_ref_corrected.png'),'-dpng','-r600');
+    mkdir(strcat('..\combined_plots\suns_exp_and_ref_corrected_in_cartesian\', files{i}));
+    print(f, strcat('..\combined_plots\suns_exp_and_ref_corrected_in_cartesian\', files{i}, '\', files{i}, '_suns_exp_ref_corrected.png'),'-dpng','-r600');
     
     all_results.timestamp_als_1 = suns_exp.timestamp_als_1;
     all_results.timestamp_als_2 = suns_exp.timestamp_als_1;
@@ -94,5 +95,5 @@ for i = 1:numel(files)
     all_results.suns_ref_y = zzz(2, :);
     all_results.suns_ref_z = zzz(3, :);
     
-    save(strcat('..\combined_plots\suns_exp_and_ref_not_corrected_in_cartesian\', files{i}, '\', files{i}, '_suns_exp_ref_corrected.mat'), 'all_results');
+    save(strcat('..\combined_plots\suns_exp_and_ref_corrected_in_cartesian\', files{i}, '\', files{i}, '_suns_exp_ref_corrected.mat'), 'all_results');
 end
