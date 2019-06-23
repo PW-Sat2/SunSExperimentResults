@@ -3,17 +3,14 @@ function [] = suns_ref_to_angle(filename)
 %   Detailed explanation goes here
 
 load(strcat('..\..\experiment_data\matlab\', filename, '.mat'));
-sunsRefV = table2array(suns(:, 6:10));
+sunsRefV = table2array(suns(:, 6:10))/1000;
 
 i = 1;
 
-LIGHT_THRESHOLD = 5000;
 for ii=1:size(sunsRefV,1)
-    if suns.ALSVL1A(ii) > LIGHT_THRESHOLD && suns.ALSVL1B(ii) > LIGHT_THRESHOLD && suns.ALSVL1C(ii) > LIGHT_THRESHOLD && suns.ALSVL1D(ii) > LIGHT_THRESHOLD
-        SunSRefResults(i, :) = suns_ref_meas(sunsRefV(ii,:));
-        real_timestamp(i) = suns.timestamp(ii);
-        i = i+1;
-    end
+    SunSRefResults(i, :) = suns_ref_meas(sunsRefV(ii,:));
+    real_timestamp(i) = suns.timestamp(ii);
+    i = i+1;
 end
 
 % figure('Name','SunSRef theta rough');

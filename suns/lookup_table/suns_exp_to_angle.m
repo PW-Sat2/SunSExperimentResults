@@ -1,6 +1,6 @@
 files = {'suns1',
          'suns2',
-         'suns3_time_corrected',
+         %'suns3_time_corrected',
          'suns4',
          'suns5',
          'suns6',
@@ -14,7 +14,7 @@ files = {'suns1',
          'sunsps6',
          'sunsps7'};
 
-for i = 4:4
+for i = 1:numel(files)
     files{i}
     process_suns_file(files{i});
 end

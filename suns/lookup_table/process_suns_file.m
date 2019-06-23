@@ -42,6 +42,7 @@ all_y_results = {y_results_1, y_results_2, y_results_3};
 als_calib_data_columns = {1, 3, 5};
 
 for als=[1, 2, 3]
+    als
     calibration_x = Data.valueVisNormalized(:, :, als_calib_data_columns{als});
     calibration_y = Data.valueVisNormalized(:, :, als_calib_data_columns{als}+1);
     
@@ -49,7 +50,7 @@ for als=[1, 2, 3]
     orbit_x = als_x{als};
     orbit_y = als_y{als};
 
-    SHADOW_THRESHOLD = 4000;
+    SHADOW_THRESHOLD = 1000;
     RETRIES_THRESHOLD = 200;
     UNCERTAINTY_0 = 0.0001;
     UNCERTAINTY_INC = 0.0001;
@@ -81,7 +82,7 @@ for als=[1, 2, 3]
                     uncertainties(counter) = uncertainty;
                     res_size = size(result);
 
-                    fprintf('T: %.2f; X: %.3f; Y: %.3f; SIZE: %d; UN: %.4f; RET: %d\n', suns.timestamp(i), x_out, y_out, res_size(1), uncertainty, counter);
+                    %fprintf('T: %.2f; X: %.3f; Y: %.3f; SIZE: %d; UN: %.4f; RET: %d\n', suns.timestamp(i), x_out, y_out, res_size(1), uncertainty, counter);
                     break
                 end
                 uncertainty = uncertainty + UNCERTAINTY_INC;
