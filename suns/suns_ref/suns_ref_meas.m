@@ -51,5 +51,5 @@ for ii=0:5
 end
 
 angles = rad2deg([pi/2-lambda, v, pi/2-lambda_r, v_r]);
-%angles = rad2deg([lambda, v, lambda_r, v_r]);
+angles = rad2deg([lambda, v, lambda_r, v_r]);
 end

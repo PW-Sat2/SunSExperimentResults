@@ -5,7 +5,24 @@ function [] = process_suns_file(meas_file)
 % load calibration data
 % the best calibration right now
 calibration_file = '1511865491_resampled_4';
-load(strcat('..\..\experiment_data\matlab\calibration_data\results20171128_1238_1.13_1.13\', calibration_file, '.mat'));
+folder = 'results20171128_1238_1.13_1.13';
+
+% calibration_file = '1511260304_resampled_4';
+% folder = 'results20171122_1146_1.13_1.13';
+% 
+% calibration_file = '1511343969_resampled_4';
+% folder = 'results20171121_1231_1.13_1.13';
+% 
+% calibration_file = '1511360702_resampled_4';
+% folder = 'results20171122_1625_1.13_1.13';
+% 
+% calibration_file = '1511423914_resampled_4';
+% folder = 'results20171123_0958_1.13_1.13';
+
+% folder = 'results20171129_1357_1.13_1.13';
+% calibration_file = '1511956631';
+
+load(strcat('..\..\experiment_data\matlab\calibration_data\', folder, '\', calibration_file, '.mat'));
 
 % load measurement
 load(strcat('..\..\experiment_data\matlab\', meas_file, '.mat'));
@@ -72,7 +89,7 @@ for als=[1, 2, 3]
                 result = raw_to_angle(picked_x, picked_y, calibration_x, calibration_y, uncertainty);
 
                 if (size(result) ~= [0, 0])
-                    x_out = calib_step*(mean(result(:,1)-1));
+                    x_out = 90-calib_step*(mean(result(:,1)-1));
                     y_out = calib_step*(mean(result(:,2)-1));
 
                     x_results = [x_results, x_out];
@@ -82,7 +99,7 @@ for als=[1, 2, 3]
                     uncertainties(counter) = uncertainty;
                     res_size = size(result);
 
-                    %fprintf('T: %.2f; X: %.3f; Y: %.3f; SIZE: %d; UN: %.4f; RET: %d\n', suns.timestamp(i), x_out, y_out, res_size(1), uncertainty, counter);
+                    fprintf('T: %.2f; X: %.3f; Y: %.3f; SIZE: %d; UN: %.4f; RET: %d\n', suns.timestamp(i), x_out, y_out, res_size(1), uncertainty, counter);
                     break
                 end
                 uncertainty = uncertainty + UNCERTAINTY_INC;

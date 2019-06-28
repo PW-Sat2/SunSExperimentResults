@@ -21,15 +21,13 @@ for jj = 1:numel(files)
     files{jj}
     load(strcat('..\combined_plots\suns_exp_and_ref_not_corrected\', files{jj}, '/', files{jj}, '_suns_exp_ref_not_corrected.mat'));
     
-    theta_all = deg2rad(all_data.suns_ref_theta);
+    theta_all = deg2rad((all_data.suns_ref_theta));
     fi_all = deg2rad(all_data.suns_ref_fi);
-    alpha = deg2rad(15);
-
-    theta_exp = deg2rad(all_data.theta_als_1);
-    fi_exp = deg2rad(all_data.fi_als_1);
+    alpha = deg2rad(-15);
 
     timestamp_theta = [];
     theta_prim = [];
+    fi_prim = [];
     for x=1:size(theta_all)
         theta = theta_all(x);
         if theta ~= NaN
@@ -43,13 +41,13 @@ for jj = 1:numel(files)
 
             psi_prim = R*psi';
             theta_prim = [theta_prim, 2*atan2(abs(psi_prim(2)), abs(psi_prim(1)))];
-%             fi_temp = -angle(psi_prim(2))-angle(psi_prim(1));
+            fi_temp = -angle(psi_prim(2))-angle(psi_prim(1));
 
-%             if fi_temp < 0
-%                 fi_prim(x) = fi_temp + 2*pi;
-%             else
-%                 fi_prim(x) = fi_temp;
-%             end
+            if fi_temp < 0
+                fi_prim = [fi_prim, fi_temp + 2*pi];
+            else
+                fi_prim = [fi_prim, fi_temp];
+            end
         end
         
     end
@@ -57,16 +55,22 @@ for jj = 1:numel(files)
     mkdir(strcat('..\combined_plots\suns_exp_and_ref_corrected\', files{jj}, '\'));
 
     %close all;
+    save_data = all_data;
+    save_data.suns_ref_timestamp = timestamp_theta;
+    save_data.suns_ref_theta = rad2deg(theta_prim);
+    save_data.suns_ref_fi = rad2deg(fi_prim);
+    save(strcat('..\combined_plots\suns_exp_and_ref_corrected\', files{jj}, '\', files{jj}, '_suns_exp_ref_corrected.mat'));
+    
     f = figure('Renderer', 'painters', 'Position', [10 10 1600 1000]);
     hold on;
-    plot(all_data.timestamp_als_1/60, all_data.theta_als_1, '*');
-    plot(all_data.timestamp_als_2/60, all_data.theta_als_2, '*');
-    plot(all_data.timestamp_als_3/60, all_data.theta_als_3, '*');
+    plot(all_data.timestamp_als_1/60, (all_data.theta_als_1), '*');
+    plot(all_data.timestamp_als_2/60, (all_data.theta_als_2), '*');
+    plot(all_data.timestamp_als_3/60, (all_data.theta_als_3), '*');
 
     %plot(all_data.suns_ref_timestamp, rad2deg(theta_all), '*');
     plot(timestamp_theta, rad2deg(theta_prim), '*');
-
-    title('Theta');
+    
+    title(strcat(files{jj}, ' - Theta (elevation)'));
     grid on;
     legend('SunS Exp ALS 1', 'SunS Exp ALS 2', 'SunS Exp ALS 3', 'Sun Ref', 'Location', 'Best');
     ylabel('Angle (\circ)');
@@ -74,6 +78,8 @@ for jj = 1:numel(files)
     
     print(f, strcat('..\combined_plots\suns_exp_and_ref_corrected\', files{jj}, '\', files{jj}, '_suns_exp_ref_corrected_theta.png'),'-dpng','-r600');
     
+    savefig(f, strcat('..\combined_plots\suns_exp_and_ref_corrected\', files{jj}, '\', files{jj}, '_suns_exp_ref_corrected_theta.fig'));
+
     f = figure('Renderer', 'painters', 'Position', [10 10 1600 1000]);
     %plot(all_data.suns_ref_timestamp, rad2deg(fi_prim), '.');
     hold on;
@@ -81,14 +87,17 @@ for jj = 1:numel(files)
     plot(all_data.timestamp_als_2/60, all_data.fi_als_2, '*');
     plot(all_data.timestamp_als_3/60, all_data.fi_als_3, '*');
 
-    plot(all_data.suns_ref_timestamp/60, rad2deg(fi_all), '*');
-    title('Fi');
+    %plot(all_data.suns_ref_timestamp/60, rad2deg(fi_all), '*');
+    plot(all_data.suns_ref_timestamp/60, rad2deg(fi_prim), '*');
+    title(strcat(files{jj}, ' - Phi (azimuth)'));
     grid on;
     legend('SunS Exp ALS 1', 'SunS Exp ALS 2', 'SunS Exp ALS 3', 'Sun Ref', 'Location', 'Best');
     ylabel('Angle (\circ)');
     xlabel('Time (min)');
     print(f, strcat('..\combined_plots\suns_exp_and_ref_corrected\', files{jj}, '\', files{jj}, '_suns_exp_ref_corrected_fi.png'),'-dpng','-r600');
     
+    savefig(f, strcat('..\combined_plots\suns_exp_and_ref_corrected\', files{jj}, '\', files{jj}, '_suns_exp_ref_corrected_fi.fig'));
+
     %close all;
 
 end

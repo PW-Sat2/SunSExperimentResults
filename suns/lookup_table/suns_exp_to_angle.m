@@ -1,6 +1,6 @@
 files = {'suns1',
          'suns2',
-         %'suns3_time_corrected',
+         'suns3_time_corrected',
          'suns4',
          'suns5',
          'suns6',
