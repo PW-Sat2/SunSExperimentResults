@@ -17,8 +17,7 @@ files_ref = {
 %          'sunsps5_suns_ref',
 %          'sunsps6_suns_ref',
 %          'sunsps7_suns_ref',
-%          'sunsps8_suns_ref',
-         'sunsps9_suns_ref'};
+         'sunsps8_suns_ref'};
      
 files_exp = {
 %          'suns1_suns_exp',
@@ -36,8 +35,7 @@ files_exp = {
 %          'sunsps5_suns_exp',
 %          'sunsps6_suns_exp',
 %          'sunsps7_suns_exp',
-%          'sunsps8_suns_exp',
-         'sunsps9_suns_exp'};
+         'sunsps8_suns_exp'};
      
 folders = {
 %          'suns1',
@@ -55,8 +53,7 @@ folders = {
 %          'sunsps5',
 %          'sunsps6',
 %          'sunsps7',
-%          'sunsps8',
-           'sunsps9'}; 
+         'sunsps8'}; 
 
 legend_items = {'SunS Exp ALS 1', 'SunS Exp ALS 2', 'SunS Exp ALS 3', 'SunS Ref'};
      

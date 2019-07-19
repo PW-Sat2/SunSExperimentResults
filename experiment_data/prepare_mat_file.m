@@ -1,4 +1,4 @@
-suns = sunsps6;
+suns = sunsps9;
 
 suns.ALS_1_normalized_x = (suns.ALSVL1A - suns.ALSVL1C)./(suns.ALSVL1A + suns.ALSVL1C);
 suns.ALS_1_normalized_y = (suns.ALSVL1B - suns.ALSVL1D)./(suns.ALSVL1B + suns.ALSVL1D);
