@@ -1,23 +1,25 @@
 clear all;
 
 files = {
-%          'suns1',
-%          'suns2',
-%          'suns3_time_corrected',
-%          'suns4',
-%          'suns5',
-%          'suns6',
-%          'suns7',
-%          'suns8',
-%          'sunsps1',
-%          'sunsps2',
-%          'sunsps3',
-%          'sunsps4',
-%          'sunsps5',
-%          'sunsps6',
-%          'sunsps7',
-%          'sunsps8',
-         'sunsps9'};
+         'suns1'
+         'suns2'
+         'suns3_time_corrected'
+         'suns4'
+         'suns5'
+         'suns6'
+         'suns7'
+         'suns8'
+         'sunsps1'
+         'sunsps2'
+         'sunsps3'
+         'sunsps4'
+         'sunsps5'
+         'sunsps6'
+         'sunsps7'
+         'sunsps8'
+         'sunsps9'
+         'sunsps10'
+         };
      
 %numel(files)
 for jj = 1:numel(files)
@@ -36,9 +38,9 @@ for jj = 1:numel(files)
         if theta ~= NaN
             timestamp_theta = [timestamp_theta, all_data.suns_ref_timestamp(x)/60];
             fi = fi_all(x);
-            psi = [cos(theta/2), exp(i*fi)*sin(theta/2)];
+            psi = [cos(theta/2), exp(1i*fi)*sin(theta/2)];
 
-            R = [cos(alpha/2), -i*sin(alpha/2); -i*sin(alpha/2), cos(alpha/2)];
+            R = [cos(alpha/2), -1i*sin(alpha/2); -1i*sin(alpha/2), cos(alpha/2)];
             %R = [cos(alpha/2), -sin(alpha/2); sin(alpha/2), cos(alpha/2)];
             %R = [exp(-i*alpha/2), 0; 0, exp(i*alpha/2)];
 
@@ -58,11 +60,15 @@ for jj = 1:numel(files)
     mkdir(strcat('..\combined_plots\suns_exp_and_ref_corrected\', files{jj}, '\'));
 
     %close all;
+    all_data.theta_als_1 = all_data.theta_als_1 + 1.125;
+    all_data.theta_als_2 = all_data.theta_als_2 + 1.125;
+    all_data.theta_als_3 = all_data.theta_als_3 + 1.125;
+    
     save_data = all_data;
     save_data.suns_ref_timestamp = timestamp_theta;
     save_data.suns_ref_theta = rad2deg(theta_prim);
     save_data.suns_ref_fi = rad2deg(fi_prim);
-    save(strcat('..\combined_plots\suns_exp_and_ref_corrected\', files{jj}, '\', files{jj}, '_suns_exp_ref_corrected.mat'));
+    save(strcat('..\combined_plots\suns_exp_and_ref_corrected\', files{jj}, '\', files{jj}, '_suns_exp_ref_corrected.mat'), 'save_data');
     
     f = figure('Renderer', 'painters', 'Position', [10 10 1600 1000]);
     hold on;

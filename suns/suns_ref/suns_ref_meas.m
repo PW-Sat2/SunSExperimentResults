@@ -1,6 +1,6 @@
 function angles = suns_ref_meas(V)
 
-if (4*V(5)-V(1)-V(2)-V(3)-V(4)<0.7)
+if (4*V(5)-V(1)-V(2)-V(3)-V(4) < 0.7)
     angles = [NaN, NaN, NaN, NaN];
     return
 end

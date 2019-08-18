@@ -1,18 +1,21 @@
-files = {'suns1',
-         'suns2',
-         'suns3_time_corrected',
-         'suns4',
-         'suns5',
-         'suns6',
-         'suns7',
-         'suns8',
-         'sunsps1',
-         'sunsps2',
-         'sunsps3',
-         'sunsps4',
-         'sunsps5',
-         'sunsps6',
-         'sunsps7'};
+files = {'suns1'
+         'suns2'
+         'suns3_time_corrected'
+         'suns4'
+         'suns5'
+         'suns6'
+         'suns7'
+         'suns8'
+         'sunsps1'
+         'sunsps2'
+         'sunsps3'
+         'sunsps4'
+         'sunsps5'
+         'sunsps6'
+         'sunsps7'
+         'sunsps8'
+         'sunsps9'
+         'sunsps10'};
 %numel(files)
 for i = 5:5
     load(strcat('../lookup_table/outputs/', files{i}, '/', files{i}, '_suns_exp.mat'));

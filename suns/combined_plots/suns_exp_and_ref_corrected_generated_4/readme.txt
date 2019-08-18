@@ -1,0 +1,2 @@
+generated with high res 0.1 deg only for reference sensor valid points:
+        if suns.ALSVL1A(i) > SHADOW_THRESHOLD || suns.ALSVL1B(i) > SHADOW_THRESHOLD || suns.ALSVL1C(i) > SHADOW_THRESHOLD || suns.ALSVL1D(i) > SHADOW_THRESHOLD

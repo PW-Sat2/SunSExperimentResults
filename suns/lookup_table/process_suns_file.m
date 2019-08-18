@@ -1,26 +1,6 @@
-function [] = process_suns_file(meas_file)
+function [] = process_suns_file(folder, calibration_file, meas_file)
 %PROCESS_SUNS_FILE Summary of this function goes here
 %   Detailed explanation goes here
-
-% load calibration data
-% the best calibration right now
-calibration_file = '1511865491_resampled_4';
-folder = 'results20171128_1238_1.13_1.13';
-
-% calibration_file = '1511260304_resampled_4';
-% folder = 'results20171122_1146_1.13_1.13';
-% 
-% calibration_file = '1511343969_resampled_4';
-% folder = 'results20171121_1231_1.13_1.13';
-% 
-% calibration_file = '1511360702_resampled_4';
-% folder = 'results20171122_1625_1.13_1.13';
-% 
-% calibration_file = '1511423914_resampled_4';
-% folder = 'results20171123_0958_1.13_1.13';
-
-% folder = 'results20171129_1357_1.13_1.13';
-% calibration_file = '1511956631';
 
 load(strcat('..\..\experiment_data\matlab\calibration_data\', folder, '\', calibration_file, '.mat'));
 
@@ -83,14 +63,15 @@ for als=[1, 2, 3]
         uncertainty = UNCERTAINTY_0;
         counter = 0;
 
-        if suns.ALSVL1A(i) > SHADOW_THRESHOLD || suns.ALSVL1B(i) > SHADOW_THRESHOLD || suns.ALSVL1C(i) > SHADOW_THRESHOLD || suns.ALSVL1D(i) > SHADOW_THRESHOLD
+        if 4*suns.RefV5(i)/1000-suns.RefV1(i)/1000-suns.RefV2(i)/1000-suns.RefV3(i)/1000-suns.RefV4(i)/1000 > 0.7
+        %if suns.ALSVL1A(i) > SHADOW_THRESHOLD || suns.ALSVL1B(i) > SHADOW_THRESHOLD || suns.ALSVL1C(i) > SHADOW_THRESHOLD || suns.ALSVL1D(i) > SHADOW_THRESHOLD
             while counter < RETRIES_THRESHOLD
                 counter = counter + 1;
                 result = raw_to_angle(picked_x, picked_y, calibration_x, calibration_y, uncertainty);
 
                 if (size(result) ~= [0, 0])
-                    x_out = 90-calib_step*(mean(result(:,1)-1));
-                    y_out = calib_step*(mean(result(:,2)-1));
+                    x_out = 90-calib_step*(median(result(:,1)-1));
+                    y_out = calib_step*(median(result(:,2)-1));
 
                     x_results = [x_results, x_out];
                     y_results = [y_results, y_out];

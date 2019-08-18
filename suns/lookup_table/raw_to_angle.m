@@ -1,7 +1,4 @@
-function result = raw_to_angle(picked_x, picked_y, calibration_x, calibration_y, uncertainty)
-    [sc_y, sc_x] = size(calibration_y);
-    result = [];
-    
+function result = raw_to_angle(picked_x, picked_y, calibration_x, calibration_y, uncertainty) 
     x = abs(calibration_x - picked_x) < uncertainty;
     y = abs(calibration_y - picked_y) < uncertainty;
 

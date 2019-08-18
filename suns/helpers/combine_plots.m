@@ -2,61 +2,67 @@ clear all;
 close all;
 
 files_ref = {
-%          'suns1_suns_ref',
-%          'suns2_suns_ref',
-%          'suns3_time_corrected_suns_ref',
-%          'suns4_suns_ref',
-%          'suns5_suns_ref',
-%          'suns6_suns_ref',
-%          'suns7_suns_ref',
-%          'suns8_suns_ref',
-%          'sunsps1_suns_ref',
-%          'sunsps2_suns_ref',
-%          'sunsps3_suns_ref',
-%          'sunsps4_suns_ref',
-%          'sunsps5_suns_ref',
-%          'sunsps6_suns_ref',
-%          'sunsps7_suns_ref',
-%          'sunsps8_suns_ref',
-         'sunsps9_suns_ref'};
+    'suns1_suns_ref'
+    'suns2_suns_ref'
+    'suns3_time_corrected_suns_ref'
+    'suns4_suns_ref'
+    'suns5_suns_ref'
+    'suns6_suns_ref'
+    'suns7_suns_ref'
+    'suns8_suns_ref'
+    'sunsps1_suns_ref'
+    'sunsps2_suns_ref'
+    'sunsps3_suns_ref'
+    'sunsps4_suns_ref'
+    'sunsps5_suns_ref'
+    'sunsps6_suns_ref'
+    'sunsps7_suns_ref'
+    'sunsps8_suns_ref'
+    'sunsps9_suns_ref'
+    'sunsps10_suns_ref'
+         };
      
 files_exp = {
-%          'suns1_suns_exp',
-%          'suns2_suns_exp',
-%          'suns3_time_corrected_suns_exp',
-%          'suns4_suns_exp',
-%          'suns5_suns_exp',
-%          'suns6_suns_exp',
-%          'suns7_suns_exp',
-%          'suns8_suns_exp',
-%          'sunsps1_suns_exp',
-%          'sunsps2_suns_exp',
-%          'sunsps3_suns_exp',
-%          'sunsps4_suns_exp',
-%          'sunsps5_suns_exp',
-%          'sunsps6_suns_exp',
-%          'sunsps7_suns_exp',
-%          'sunsps8_suns_exp',
-         'sunsps9_suns_exp'};
-     
+    'suns1_suns_exp'
+    'suns2_suns_exp'
+    'suns3_time_corrected_suns_exp'
+    'suns4_suns_exp'
+    'suns5_suns_exp'
+    'suns6_suns_exp'
+    'suns7_suns_exp'
+    'suns8_suns_exp'
+    'sunsps1_suns_exp'
+    'sunsps2_suns_exp'
+    'sunsps3_suns_exp'
+    'sunsps4_suns_exp'
+    'sunsps5_suns_exp'
+    'sunsps6_suns_exp'
+    'sunsps7_suns_exp'
+    'sunsps8_suns_exp'
+    'sunsps9_suns_exp'
+    'sunsps10_suns_exp'
+};
+
 folders = {
-%          'suns1',
-%          'suns2',
-%          'suns3_time_corrected',
-%          'suns4',
-%          'suns5',
-%          'suns6',
-%          'suns7',
-%          'suns8',
-%          'sunsps1',
-%          'sunsps2',
-%          'sunsps3',
-%          'sunsps4',
-%          'sunsps5',
-%          'sunsps6',
-%          'sunsps7',
-%          'sunsps8',
-           'sunsps9'}; 
+    'suns1'
+    'suns2'
+    'suns3_time_corrected'
+    'suns4'
+    'suns5'
+    'suns6'
+    'suns7'
+    'suns8'
+    'sunsps1'
+    'sunsps2'
+    'sunsps3'
+    'sunsps4'
+    'sunsps5'
+    'sunsps6'
+    'sunsps7'
+    'sunsps8'
+    'sunsps9'
+    'sunsps10'
+    }; 
 
 legend_items = {'SunS Exp ALS 1', 'SunS Exp ALS 2', 'SunS Exp ALS 3', 'SunS Ref'};
      
