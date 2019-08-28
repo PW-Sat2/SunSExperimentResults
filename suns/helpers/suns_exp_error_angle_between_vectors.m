@@ -24,7 +24,11 @@ files = {'suns1'
      
 ref_range = 1
 ERROR_TO_COUNT = 5
-CUT_ANGULAR_ERROR = 20
+CUT_ANGULAR_ERROR = 80
+ALS_between_ALS = 1
+
+error_of_all_times = [];
+error_of_all_times_als = [];
 
 %numel(files)
 for i = 1:numel(files)
@@ -32,9 +36,12 @@ for i = 1:numel(files)
 
 %     data = load(strcat('..\combined_plots\suns_exp_and_ref_corrected_all_range_3\', files{i}, '\', files{i}, '_suns_exp_ref_corrected.mat'));
     data = load(strcat('..\combined_plots\suns_exp_and_ref_corrected_ref_range_4\', files{i}, '\', files{i}, '_suns_exp_ref_corrected.mat'));
-%     data = load(strcat('..\combined_plots\suns_exp_and_ref_corrected_generated_3\', files{i}, '\', files{i}, '_suns_exp_ref_corrected.mat'));
+%      data = load(strcat('..\combined_plots\suns_exp_and_ref_corrected_generated_3\', files{i}, '\', files{i}, '_suns_exp_ref_corrected.mat'));
     
     %close all;
+    
+    mkdir(strcat('..\combined_plots\suns_exp_and_ref_corrected_ref_range_4_errors\', files{i}, '\'));
+    
     [z_exp_1,y_exp_1,x_exp_1] = sph2cart(deg2rad(data.save_data.fi_als_1), deg2rad(90-data.save_data.theta_als_1), 1);
     [z_exp_2,y_exp_2,x_exp_2] = sph2cart(deg2rad(data.save_data.fi_als_2), deg2rad(90-data.save_data.theta_als_2), 1);
     [z_exp_3,y_exp_3,x_exp_3] = sph2cart(deg2rad(data.save_data.fi_als_3), deg2rad(90-data.save_data.theta_als_3), 1);
@@ -59,96 +66,110 @@ for i = 1:numel(files)
             angular_error = [angular_error, rad2deg(ae)];
         end
 
-        figure(); 
+        f = figure('Renderer', 'painters', 'Position', [10 10 1600 1000]); 
         plot(data.save_data.timestamp_als_1/60, angular_error, '*');
         title(strcat(files{i}, " - angular error ALS 1 vs. SunS Ref"));
         ylabel('Angular error (\circ)');
         xlabel('Time (min)');
         grid on;
-        
-        figure();
-        angular_error(angular_error > CUT_ANGULAR_ERROR) = []; histogram(angular_error, 'BinWidth', 1);   
-        title(strcat(files{i}, " - angular error ALS 1 vs. SunS Ref"));
+        error_of_all_times = [error_of_all_times, angular_error];
+        savefig(f, strcat('..\combined_plots\suns_exp_and_ref_corrected_ref_range_4_errors\', files{i}, '\', files{i}, ' - angular error ALS 1 vs SunS Ref.fig'));        
+        print(f, strcat('..\combined_plots\suns_exp_and_ref_corrected_ref_range_4_errors\', files{i}, '\', files{i}, ' - angular error ALS 1 vs SunS Ref.png'),'-dpng','-r600');
+%         figure();
+%         angular_error(angular_error > CUT_ANGULAR_ERROR) = [];
+%         histogram(angular_error, 'BinWidth', 1);   
+%         title(strcat(files{i}, " - angular error ALS 1 vs. SunS Ref"));
 
-        angular_error_median = mean(abs(angular_error));
+        angular_error_mean = mean(abs(angular_error));
         angular_error_std = std(angular_error);
         
-        count_angular_error = size(angular_error(angular_error > angular_error_median), 2);
-        fprintf("ref;als1;%s;%f;%f;%d;%d\n", files{i}, angular_error_median, angular_error_std, count_angular_error, size(z_exp_1, 2));
+        count_angular_error = size(angular_error(angular_error > angular_error_mean), 2);
+        fprintf("ref;als1;%s;%f;%f;%d;%d\n", files{i}, angular_error_mean, angular_error_std, count_angular_error, size(z_exp_1, 2));
 
     end
-    % angular error between suns exp ALS 1 and suns exp ALS 2
-    angular_error = [];
-    for d=1:size(z_exp_1, 2)
-        angular_error = [angular_error, rad2deg(subspace([z_exp_1(d);y_exp_1(d);x_exp_1(d)],[z_exp_2(d);y_exp_2(d);x_exp_2(d)]))];
-    end
     
-    figure(); 
-    plot(data.save_data.timestamp_als_1/60, angular_error, '*');
-    title(strcat(files{i}, " - angular error ALS 1 vs. ALS 2"));
-    ylabel('Angular error (\circ)');
-    xlabel('Time (min)');
-    grid on;
-    
-    figure(); 
-    angular_error(angular_error > CUT_ANGULAR_ERROR) = []; histogram(angular_error, 'BinWidth', 1);  
-    title(strcat(files{i}, " - angular error ALS 1 vs. ALS 2"));
-    
-    angular_error_median = mean(abs(angular_error));
-    angular_error_std = std(angular_error);
-    
-    count_angular_error = size(angular_error(angular_error > angular_error_median), 2);
-    fprintf("als1;als2;%s;%f;%f;%d;%d\n", files{i}, angular_error_median, angular_error_std, count_angular_error, size(z_exp_1, 2));
+    if ALS_between_ALS
+        % angular error between suns exp ALS 1 and suns exp ALS 2
+        angular_error = [];
+        for d=1:size(z_exp_1, 2)
+            angular_error = [angular_error, rad2deg(subspace([z_exp_1(d);y_exp_1(d);x_exp_1(d)],[z_exp_2(d);y_exp_2(d);x_exp_2(d)]))];
+        end
+
+        f = figure('Renderer', 'painters', 'Position', [10 10 1600 1000]);
+        plot(data.save_data.timestamp_als_1/60, angular_error, '*');
+        title(strcat(files{i}, " - angular error ALS 1 vs. ALS 2"));
+        ylabel('Angular error (\circ)');
+        xlabel('Time (min)');
+        grid on;
+        error_of_all_times_als = [error_of_all_times_als, angular_error];
+        savefig(f, strcat('..\combined_plots\suns_exp_and_ref_corrected_ref_range_4_errors\', files{i}, '\', files{i}, ' - angular error ALS 1 vs ALS 2.fig'));        
+        print(f, strcat('..\combined_plots\suns_exp_and_ref_corrected_ref_range_4_errors\', files{i}, '\', files{i}, ' - angular error ALS 1 vs ALS 2.png'),'-dpng','-r600');
+
+        figure(); 
+        angular_error(angular_error > CUT_ANGULAR_ERROR) = []; histogram(angular_error, 'BinWidth', 1);  
+        title(strcat(files{i}, " - angular error ALS 1 vs. ALS 2"));
+
+        angular_error_mean = mean(abs(angular_error));
+        angular_error_std = std(angular_error);
+
+        count_angular_error = size(angular_error(angular_error > angular_error_mean), 2);
+        fprintf("als1;als2;%s;%f;%f;%d;%d\n", files{i}, angular_error_mean, angular_error_std, count_angular_error, size(z_exp_1, 2));
+
+        % angular error between suns exp ALS 1 and suns exp ALS 3
+        angular_error = [];
+        for d=1:size(z_exp_1, 2)
+            angular_error = [angular_error, rad2deg(subspace([z_exp_1(d);y_exp_1(d);x_exp_1(d)],[z_exp_3(d);y_exp_3(d);x_exp_3(d)]))];
+        end
+
+        f = figure('Renderer', 'painters', 'Position', [10 10 1600 1000]);
+        plot(data.save_data.timestamp_als_1/60, angular_error, '*');
+        title(strcat(files{i}, " - angular error ALS 1 vs. ALS 3"));
+        ylabel('Angular error (\circ)');
+        xlabel('Time (min)');
+        grid on;
         
-    % angular error between suns exp ALS 1 and suns exp ALS 3
-    angular_error = [];
-    for d=1:size(z_exp_1, 2)
-        angular_error = [angular_error, rad2deg(subspace([z_exp_1(d);y_exp_1(d);x_exp_1(d)],[z_exp_3(d);y_exp_3(d);x_exp_3(d)]))];
-    end
-    
-    figure(); 
-    plot(data.save_data.timestamp_als_1/60, angular_error, '*');
-    title(strcat(files{i}, " - angular error ALS 1 vs. ALS 3"));
-    ylabel('Angular error (\circ)');
-    xlabel('Time (min)');
-    grid on;
-    
-    
-    figure(); 
-    angular_error(angular_error > CUT_ANGULAR_ERROR) = []; histogram(angular_error, 'BinWidth', 1);    
-    title(strcat(files{i}, " - angular error ALS 1 vs. ALS 3"));
-    
-    angular_error_median = mean(abs(angular_error));
-    angular_error_std = std(angular_error);
-    
-    count_angular_error = size(angular_error(angular_error > angular_error_median), 2);
-    fprintf("als1;als3;%s;%f;%f;%d;%d\n", files{i}, angular_error_median, angular_error_std, count_angular_error, size(z_exp_1, 2));
-    
-    % angular error between suns exp ALS 2 and suns exp ALS 3
-    angular_error = [];
-    for d=1:size(z_exp_1, 2)
-        angular_error = [angular_error, rad2deg(subspace([z_exp_2(d);y_exp_2(d);x_exp_2(d)],[z_exp_3(d);y_exp_3(d);x_exp_3(d)]))];
-    end
-    
-    figure(); 
-    plot(data.save_data.timestamp_als_1/60, angular_error, '*');
-    title(strcat(files{i}, " - angular error ALS 2 vs. ALS 3"));
-    ylabel('Angular error (\circ)');
-    xlabel('Time (min)');
-    grid on;
-    
-    figure(); 
-    angular_error(angular_error > CUT_ANGULAR_ERROR) = []; histogram(angular_error, 'BinWidth', 1);
-    title(strcat(files{i}, " - angular error ALS 2 vs. ALS 3"));
-    
-    
-    angular_error_median = mean(abs(angular_error));
-    angular_error_std = std(angular_error);
-    
-    count_angular_error = size(angular_error(angular_error > angular_error_median), 2);
-    fprintf("als2;als3;%s;%f;%f;%d;%d\n", files{i}, angular_error_median, angular_error_std, count_angular_error, size(z_exp_1, 2));
+        savefig(f, strcat('..\combined_plots\suns_exp_and_ref_corrected_ref_range_4_errors\', files{i}, '\', files{i}, ' - angular error ALS 1 vs ALS 3.fig'));        
+        print(f, strcat('..\combined_plots\suns_exp_and_ref_corrected_ref_range_4_errors\', files{i}, '\', files{i}, ' - angular error ALS 1 vs ALS 3.png'),'-dpng','-r600');
+
+        figure(); 
+        angular_error(angular_error > CUT_ANGULAR_ERROR) = []; histogram(angular_error, 'BinWidth', 1);    
+        title(strcat(files{i}, " - angular error ALS 1 vs. ALS 3"));
         
-    
+        angular_error_mean = mean(abs(angular_error));
+        angular_error_std = std(angular_error);
+
+        count_angular_error = size(angular_error(angular_error > angular_error_mean), 2);
+        fprintf("als1;als3;%s;%f;%f;%d;%d\n", files{i}, angular_error_mean, angular_error_std, count_angular_error, size(z_exp_1, 2));
+
+        % angular error between suns exp ALS 2 and suns exp ALS 3
+        angular_error = [];
+        for d=1:size(z_exp_1, 2)
+            angular_error = [angular_error, rad2deg(subspace([z_exp_2(d);y_exp_2(d);x_exp_2(d)],[z_exp_3(d);y_exp_3(d);x_exp_3(d)]))];
+        end
+
+        f = figure('Renderer', 'painters', 'Position', [10 10 1600 1000]); 
+        plot(data.save_data.timestamp_als_1/60, angular_error, '*');
+        title(strcat(files{i}, " - angular error ALS 2 vs. ALS 3"));
+        ylabel('Angular error (\circ)');
+        xlabel('Time (min)');
+        grid on;
+        
+        savefig(f, strcat('..\combined_plots\suns_exp_and_ref_corrected_ref_range_4_errors\', files{i}, '\', files{i}, ' - angular error ALS 1 vs ALS 3.fig'));        
+        print(f, strcat('..\combined_plots\suns_exp_and_ref_corrected_ref_range_4_errors\', files{i}, '\', files{i}, ' - angular error ALS 1 vs ALS 3.png'),'-dpng','-r600');
+        
+
+        figure(); 
+        angular_error(angular_error > CUT_ANGULAR_ERROR) = []; histogram(angular_error, 'BinWidth', 1);
+        title(strcat(files{i}, " - angular error ALS 2 vs. ALS 3"));
+
+
+        angular_error_mean = mean(abs(angular_error));
+        angular_error_std = std(angular_error);
+
+        count_angular_error = size(angular_error(angular_error > angular_error_mean), 2);
+        fprintf("als2;als3;%s;%f;%f;%d;%d\n", files{i}, angular_error_mean, angular_error_std, count_angular_error, size(z_exp_1, 2));
+    end
+
 % %     f = figure('Renderer', 'painters', 'Position', [10 10 1200 900]);
 %     figure();
 %     subplot(3, 1, 1);
@@ -192,7 +213,7 @@ for i = 1:numel(files)
 %     mkdir(strcat('..\combined_plots\suns_exp_and_ref_corrected_in_cartesian\', files{i}));
 %     print(f, strcat('..\combined_plots\suns_exp_and_ref_corrected_in_cartesian\', files{i}, '\', files{i}, '_suns_exp_ref_corrected.png'),'-dpng','-r600');
 %     
-%     all_results.timestamp_als_1 = data.save_data.timestamp_als_1;
+%     all_results.timestamp_als_1 = data.save_data.timestamp_als_1/60;
 %     all_results.timestamp_als_2 = data.save_data.timestamp_als_2;
 %     all_results.timestamp_als_3 = data.save_data.timestamp_als_3;
 %     
@@ -215,3 +236,22 @@ for i = 1:numel(files)
 %     
 %     save(strcat('..\combined_plots\suns_exp_and_ref_corrected_in_cartesian\', files{i}, '\', files{i}, '_suns_exp_ref_corrected.mat'), 'all_results');
 end
+
+figure();
+error_of_all_times(error_of_all_times > CUT_ANGULAR_ERROR) = [];
+histogram(error_of_all_times, 'BinWidth', 1, 'Normalization', 'Probability');   
+title("ALL TIMES angular error ALS 1 vs. SunS Ref");
+xlabel('Angular error (\circ)');
+ylabel('Probability');
+grid on
+
+figure();
+error_of_all_times(error_of_all_times_als > CUT_ANGULAR_ERROR) = [];
+histogram(error_of_all_times_als, 'BinWidth', 0.5, 'Normalization', 'Probability');   
+title("ALL TIMES angular error ALS 1 vs. ALS 2");
+xlabel('Angular error (\circ)');
+ylabel('Probability');
+grid on
+
+angular_error_mean = mean(abs(error_of_all_times_als))
+angular_error_std = std(error_of_all_times_als)

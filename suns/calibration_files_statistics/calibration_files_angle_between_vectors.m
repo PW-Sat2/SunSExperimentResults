@@ -3,6 +3,10 @@
 clear all;
 close all;
 
+plot_hist = true
+plot_points = false
+plot_surf = false
+
 path = '..\lookup_table\calibration_evaluation_outputs\selected_best_based_on_raw_3';
 listing = dir(path);
 
@@ -52,32 +56,48 @@ for i = 1:size(listing)
                     [z_exp_1,y_exp_1,x_exp_1] = sph2cart(deg2rad(y_results_array), deg2rad(90-x_results_array), 1);
                     [z_ref,y_ref,x_ref] = sph2cart(deg2rad(y_reference_array), deg2rad(90-x_reference_array), 1);
 
-                    % angular error between suns ref and suns exp
+                    % angular error between stand and suns exp
                     angular_error = [];
                     for d=1:size(z_exp_1, 1)
                         angular_error = [angular_error, rad2deg(subspace([z_exp_1(d);y_exp_1(d);x_exp_1(d)],[z_ref(d);y_ref(d);x_ref(d)]))];
                     end
 
                     if als+1 ~= ref
-                        figure(); 
-                        plot(angular_error, '*');
-                        title(strcat(file, ': ', ref_names{ref}, ' - ', test_names{als}));
-                        ylabel('Angular error (\circ)');
-                        xlabel('Time (min)');
-                        grid on;
+                        if plot_points
+                            figure(); 
+                            plot(angular_error, '*');
+                            title(strcat(file, ': ', ref_names{ref}, ' - ', test_names{als}));
+                            ylabel('Angular error (\circ)');
+                            xlabel('Time (min)');
+                            grid on;
+                        end
+                        
+                        if plot_hist
+                            figure(); 
+                            if ref == 1
+                                histogram(angular_error, 'BinWidth', 0.25);
+                            else
+                                histogram(angular_error, 'BinWidth', 1);
+                            end
+                            title(strcat(file, ': ', ref_names{ref}, ' - ', test_names{als}));
+                            xlabel('Angular error (\circ)');
+                            grid on;                            
+                        end
 
                         angular_error_rms = mean(abs(angular_error));
                         count_errors = size(angular_error(angular_error > ERROR_TO_COUNT), 2);
                         fprintf("%s;%s;%s;%f;%d\n", file, ref_names{ref}, test_names{als}, angular_error_rms, count_errors);
-                    
-                        figure();
-                        surf(reshape(angular_error, [319, 64]));
-                        title(strcat(file, ': ', ref_names{ref}, ' - ', test_names{als}));
-                        colorbar
-                        zlim([0, 2.5]);
-                        view(0, 90);
-                        caxis([0, 2.5]);
-                        shading flat;
+                        
+                        if plot_surf
+                            figure();
+                            surf(reshape(angular_error, [319, 64]));
+                            title(strcat(file, ': ', ref_names{ref}, ' - ', test_names{als}));
+                            colorbar
+                            zlim([0, 2.5]);
+                            view(0, 90);
+                            caxis([0, 2.5]);
+                            shading flat;
+                        end
                     end
             end
         end
