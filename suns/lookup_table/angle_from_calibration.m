@@ -1,9 +1,9 @@
 function [] = angle_from_calibration(folder_ref, calibration_file_ref, folder_test, calibration_file_test)
 
-reference_calibration_file = load(strcat('..\..\experiment_data\matlab\calibration_data\', folder_ref, '\', calibration_file_ref, '.mat'));
+test_calibration_file = load(strcat('..\..\experiment_data\matlab\calibration_data\', folder_ref, '\', calibration_file_ref, '.mat'));
 
 % load calibration under tests
-test_calibration_file = load(strcat('..\..\experiment_data\matlab\calibration_data\', folder_test, '\', calibration_file_test, '.mat'));
+reference_calibration_file = load(strcat('..\..\experiment_data\matlab\calibration_data\', folder_test, '\', calibration_file_test, '.mat'));
 
 als_x = {reference_calibration_file.Data.valueVisNormalized(:, :, 1), reference_calibration_file.Data.valueVisNormalized(:, :, 3), reference_calibration_file.Data.valueVisNormalized(:, :, 5)};
 als_y = {reference_calibration_file.Data.valueVisNormalized(:, :, 2), reference_calibration_file.Data.valueVisNormalized(:, :, 4), reference_calibration_file.Data.valueVisNormalized(:, :, 6)};
@@ -27,11 +27,11 @@ y_results_1 = [];
 y_results_2 = [];
 y_results_3 = [];
 
-calib_step = 1.125;
+calib_step = 1.125/4;
 all_y_results = {y_results_1, y_results_2, y_results_3};
 als_calib_generated_columns = {1, 3, 5};
 
-for als=[1, 2, 3]
+for als=[1]
     als
     calibration_x = test_calibration_file.Data.valueVisNormalized(:, :, als_calib_generated_columns{als});
     calibration_y = test_calibration_file.Data.valueVisNormalized(:, :, als_calib_generated_columns{als}+1);
@@ -73,7 +73,7 @@ for als=[1, 2, 3]
                 uncertainties(counter) = uncertainty;
                 res_size = size(result);
 
-                %fprintf('X: %.3f; Y: %.3f; SIZE: %d; UN: %.4f; RET: %d\n', x_out, y_out, res_size(1), uncertainty, counter);
+                fprintf('X: %.3f; Y: %.3f; SIZE: %d; UN: %.4f; RET: %d\n', x_out, y_out, res_size(1), uncertainty, counter);
                 break
             end
             uncertainty = uncertainty + UNCERTAINTY_INC;
@@ -112,6 +112,11 @@ for als=[1, 2, 3]
     
     all_results.true_array_x = true_array_x;
     all_results.true_array_y = true_array_y;
+    
+
+    all_results.x_results_array = reshape(x_results, [321, 81]);
+    all_results.y_results_array = reshape(y_results, [321, 81]);
+
     
     save(strcat('calibration_evaluation_outputs\', calibration_file_ref, '-vs-', calibration_file_test, ' angular_results.mat'), 'all_results');
 end

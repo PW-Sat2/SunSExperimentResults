@@ -12,10 +12,10 @@ folders = {
 %     'results20171124_0730_1.13_1.13'
 %     'results20171124_1136_1.13_1.13'
 %     'results20171127_1432_1.13_1.13'
-    'results20171128_1238_1.13_1.13'
-    'results20171129_0707_1.13_1.13'
+     'results20171128_1238_1.13_1.13'
+%     'results20171129_0707_1.13_1.13'
     'results20171129_1357_1.13_1.13'
-    'results20171130_1242_1.13_1.13'
+%     'results20171130_1242_1.13_1.13'
 %     'results20171204_1432_1.13_1.13'
 };
 
@@ -30,10 +30,10 @@ files = {
 %     '1511501431'
 %     '1511516211'
 %     '1511785970c'
-    '1511865491'
-    '1511932042'
+     '1511865491'
+%     '1511932042'
     '1511956631'
-    '1512038550'
+%     '1512038550'
 %     '1512390730'
 };
 
@@ -49,9 +49,9 @@ files_resampled = {
 %     '1511516211_resampled_4'
 %     '1511785970c_resampled_4'
     '1511865491_resampled_4'
-    '1511932042_resampled_4'
+%     '1511932042_resampled_4'
     '1511956631_resampled_4'
-    '1512038550_resampled_4'
+%     '1512038550_resampled_4'
 %     '1512390730_resampled_4'
 };
 
@@ -60,16 +60,15 @@ files_resampled = {
 % the best calibration right now
 
 
-for i = 1:4
+% for i = 1:4
 
-ref_no = i
-calibration_file_ref = files{ref_no};
+ref_no = 1
+calibration_file_ref = files_resampled{ref_no};
 folder_ref = folders{ref_no};
 
-    for j = 1:4
+%     for j = 1:4
         
-        test_no = j
-
+        test_no = 2
         calibration_file_test = files{test_no};
         folder_test = folders{test_no};
 
@@ -79,5 +78,5 @@ folder_ref = folders{ref_no};
 
             
             close all;
-    end
-end
+%     end
+% end

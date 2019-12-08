@@ -19,7 +19,13 @@ datanames = {
 %          'sunsps7'
 %          'sunsps8'
 %          'sunsps9'
-         'sunsps10'};
+%          'sunsps10'
+         'sunsps11'
+         'sunsps12'
+         'sunsps13'
+         'sunsps14'
+         'sunsps15'
+         'sunsps16'};
 
 for k=1:length(datanames)
     dataname = datanames{k}
